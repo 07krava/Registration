@@ -63,6 +63,7 @@ public class AuthController {
         user.setEmail(registerDto.getEmail());
         user.setPhone(registerDto.getPhone());
         user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
+        user.setOrder(null);
 
 
         Role roles = roleRepository.findByName("USER").get();
