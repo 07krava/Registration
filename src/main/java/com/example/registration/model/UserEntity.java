@@ -5,10 +5,11 @@ import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
-@Table(name = "users")
+@Table(name = "user")
 public class UserEntity {
 
     @Id
@@ -19,12 +20,13 @@ public class UserEntity {
     private String phone;
     private String email;
     private String password;
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
-    inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
-    private List<Role> roles = new ArrayList<>();
-    @OneToOne
-    @JoinColumn(name = "order_id")
+    // enum must be here
+
+    @Enumerated(EnumType.STRING)
+    private Role roles;
+
+    @OneToMany
+    //@JoinColumn(name = "orders_id")
     private Order order;
 
 }
