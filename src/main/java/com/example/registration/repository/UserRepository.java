@@ -1,9 +1,11 @@
 package com.example.registration.repository;
 
-import com.example.registration.model.UserEntity;
+import com.example.registration.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepository extends JpaRepository<UserEntity, Long> {
-    UserEntity findByUsername(String username);
+import java.util.Optional;
+
+public interface UserRepository extends JpaRepository<User, Long> {
+    Optional<User> findByUsername(String username);
     Boolean existsByUsername(String username);
 }

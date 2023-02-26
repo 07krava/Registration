@@ -1,9 +1,9 @@
 package com.example.registration.controllers;
 
-import com.example.registration.dto.AdminUserDao;
 import com.example.registration.dto.RoomDto;
+import com.example.registration.dto.UserDTO;
 import com.example.registration.model.Room;
-import com.example.registration.model.UserEntity;
+import com.example.registration.model.User;
 import com.example.registration.service.RoomService;
 import com.example.registration.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -29,19 +29,19 @@ public class AdminController {
     }
 
         @GetMapping(value = "users/{id}")
-        public ResponseEntity<AdminUserDao> getUserById(@PathVariable(name = "id") Long id){
-            UserEntity user = userService.findById(id);
+        public ResponseEntity<UserDTO> getUserById(@PathVariable(name = "id") Long id){
+            User user = userService.findById(id);
 
             if (user == null){
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
-            AdminUserDao result = AdminUserDao.fromUserEntity(user);
+            UserDTO result = UserDTO.convertToDTO(user);
             return new ResponseEntity<>(result, HttpStatus.OK);
         }
 
         @GetMapping(value = "allUsers")
-        public ResponseEntity <List<UserEntity>> getAllUsers(){
-        List<UserEntity> users = userService.getAll();
+        public ResponseEntity <List<User>> getAllUsers(){
+        List<User> users = userService.getAll();
 
         if (users.isEmpty()){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

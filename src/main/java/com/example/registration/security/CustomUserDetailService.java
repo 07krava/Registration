@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,8 +29,11 @@ public class CustomUserDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserEntity user = userRepository.findByUsername(username);
-        return new User(user.getUsername(), user.getPassword(), mapRolesToAuthorities(user.getRoles()));
+        Optional<com.example.registration.model.User> byUsername = userRepository.findByUsername(username);
+        if (byUsername.isPresent()) {
+            com.example.registration.model.User user = byUsername.get();
+            return new User(user.getUsername(), user.getPassword(), mapRolesToAuthorities(user.getRole().));
+        }
     }
 
     private Collection<GrantedAuthority> mapRolesToAuthorities(List<Role> roles){
