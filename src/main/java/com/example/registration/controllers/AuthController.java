@@ -57,7 +57,7 @@ public class AuthController {
         if (userRepository.existsByUsername(registerDto.getUsername())){
             return new ResponseEntity<>("Username is taken!", HttpStatus.BAD_REQUEST);
         }
-
+        //TODO resolve this issues and use builder
         UserEntity user = new UserEntity();
         user.setUsername(registerDto.getUsername());
         user.setEmail(registerDto.getEmail());

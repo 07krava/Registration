@@ -15,6 +15,7 @@ public class UserDTO {
     private String phone;
     private String password;
 
+    //TODO rename to convertToEntity
     public User toUser(){
         User user = new User();
         user.setId(id);

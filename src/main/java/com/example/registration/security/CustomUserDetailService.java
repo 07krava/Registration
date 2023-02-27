@@ -32,10 +32,12 @@ public class CustomUserDetailService implements UserDetailsService {
         Optional<com.example.registration.model.User> byUsername = userRepository.findByUsername(username);
         if (byUsername.isPresent()) {
             com.example.registration.model.User user = byUsername.get();
+            //TODO fix this issue
             return new User(user.getUsername(), user.getPassword(), mapRolesToAuthorities(user.getRole().));
         }
     }
 
+    //TODO refactor
     private Collection<GrantedAuthority> mapRolesToAuthorities(List<Role> roles){
         return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
     }

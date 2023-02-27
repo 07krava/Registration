@@ -47,7 +47,7 @@ public class RoomController {
         }
         return new ResponseEntity<>(room, HttpStatus.OK);
     }
-
+    //TODO refactor
     @GetMapping("/{id}/order")
     public ResponseEntity<Order> addOrder(@PathVariable Long id, UserEntity user){
         if (user == null){

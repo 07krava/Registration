@@ -18,7 +18,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/admin/")
 public class AdminController {
-
+	//TODO please do all this instructions in every files, you can do it any time and before commit too
+	// 1) reformat all files in project got to -> Code -> Reformat code
+	// 2) optimize imports go to Code -> Optimize imports
+	// 3) after finishing making task which is described in todo, you can remove it(just delete TODO comments)
     private final UserService userService;
     private final RoomService roomService;
 
@@ -30,7 +33,8 @@ public class AdminController {
 
         @GetMapping(value = "users/{id}")
         public ResponseEntity<UserDTO> getUserById(@PathVariable(name = "id") Long id){
-            User user = userService.findById(id);
+        //TODO rewrite using optional.isPresent or optional.ifPresent
+		User user = userService.findById(id);
 
             if (user == null){
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);

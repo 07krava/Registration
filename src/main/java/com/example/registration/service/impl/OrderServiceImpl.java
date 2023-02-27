@@ -45,6 +45,7 @@ public class OrderServiceImpl implements OrderService {
         List<Room> rooms = (List<Room>) order.getRoom();
         List<Room> newRoomList = rooms == null ? new ArrayList<>() : new ArrayList<>(rooms);
         newRoomList.addAll(getRoomById(roomId));
+        //TODO Casting 'newRoomList' to 'Room' will produce 'ClassCastException' for any non-null value
         order.setRoom((Room) newRoomList);
         orderRepository.save(order);
     }

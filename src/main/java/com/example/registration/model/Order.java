@@ -22,6 +22,7 @@ public class Order {
     private LocalDateTime created;
     @Column(name = "updated")
     private LocalDateTime update;
+    //TODO refactor
     @ManyToOne
     @JoinColumn(name = "user_id")
     private UserEntity user;

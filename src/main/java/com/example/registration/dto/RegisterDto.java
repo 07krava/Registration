@@ -2,6 +2,7 @@ package com.example.registration.dto;
 
 import lombok.Data;
 
+//TODO use getter and setter annotation and remove all get and set methods
 @Data
 public class RegisterDto {
     private String username;
