@@ -2,6 +2,7 @@ package com.example.registration.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Entity
 @Table(name = "orders")
+@Builder
 public class Order {
 
     @Id
@@ -25,7 +27,7 @@ public class Order {
     //TODO refactor
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private UserEntity user;
+    private User user;
     @ManyToOne
     @JoinColumn(name = "room_id")
     private Room room;

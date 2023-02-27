@@ -2,7 +2,7 @@ package com.example.registration.service.impl;
 
 import com.example.registration.model.Order;
 import com.example.registration.model.Room;
-import com.example.registration.model.UserEntity;
+import com.example.registration.model.User;
 import com.example.registration.repository.OrderRepository;
 import com.example.registration.repository.RoomRepository;
 import com.example.registration.service.OrderService;
@@ -26,7 +26,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order createOrder(UserEntity user, List<Long> roomId) {
+    public Order createOrder(User user, List<Long> roomId) {
         Order order = new Order();
         order.setUser(user);
         List<Room> roomList = getRoomById(roomId);
@@ -42,6 +42,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void addRooms(Order order, List<Long> roomId) {
+
         List<Room> rooms = (List<Room>) order.getRoom();
         List<Room> newRoomList = rooms == null ? new ArrayList<>() : new ArrayList<>(rooms);
         newRoomList.addAll(getRoomById(roomId));

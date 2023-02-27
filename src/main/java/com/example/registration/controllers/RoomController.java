@@ -1,15 +1,17 @@
 package com.example.registration.controllers;
 
-import com.example.registration.dto.RoomDto;
 import com.example.registration.model.Order;
 import com.example.registration.model.Room;
-import com.example.registration.model.UserEntity;
+import com.example.registration.model.User;
 import com.example.registration.service.RoomService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -47,9 +49,10 @@ public class RoomController {
         }
         return new ResponseEntity<>(room, HttpStatus.OK);
     }
+
     //TODO refactor
-    @GetMapping("/{id}/order")
-    public ResponseEntity<Order> addOrder(@PathVariable Long id, UserEntity user){
+    @GetMapping("/order/{id}")
+    public ResponseEntity<Order> addOrder(@PathVariable Long id, User user){
         if (user == null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

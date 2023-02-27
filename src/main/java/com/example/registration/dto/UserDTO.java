@@ -1,5 +1,6 @@
 package com.example.registration.dto;
 
+import com.example.registration.model.Role;
 import com.example.registration.model.User;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Builder;
@@ -16,7 +17,7 @@ public class UserDTO {
     private String password;
 
     //TODO rename to convertToEntity
-    public User toUser(){
+    public User convertToEntity(){
         User user = new User();
         user.setId(id);
         user.setUsername(username);

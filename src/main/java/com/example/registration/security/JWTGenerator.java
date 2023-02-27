@@ -13,22 +13,21 @@ import java.util.Date;
 public class JWTGenerator {
 
     public String generateToken(Authentication authentication){
-        String username = authentication.getName();
+        //String username = authentication.getName();
         //TODO refactor try not to create useless variable
         //  Date currentDate = new Date(); remove this row
         //        Date expireDate = new Date(new Date().getTime() + SecurityConstants.JWT_EXPIRATION);
-        Date currentDate = new Date();
-        Date expireDate = new Date(currentDate.getTime() + SecurityConstants.JWT_EXPIRATION);
+        Date expireDate = new Date(new Date().getTime() + SecurityConstants.JWT_EXPIRATION);
 
         //TODO don't create variable, just put return statements  return Jwts.builder()
         //                .setSubject(username).....
-        String token = Jwts.builder()
-                .setSubject(username)
+        return Jwts.builder()
+                .setSubject(authentication.getName())
                 .setIssuedAt(new Date())
                 .setExpiration(expireDate)
                 .signWith(SignatureAlgorithm.HS512, SecurityConstants.JWT_SECRET)
                 .compact();
-        return token;
+        //return token;
     }
 
     public String getUsernameFromJWT(String token){

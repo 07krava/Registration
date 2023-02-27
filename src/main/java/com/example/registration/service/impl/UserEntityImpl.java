@@ -2,7 +2,6 @@ package com.example.registration.service.impl;
 
 import com.example.registration.dto.UserDTO;
 import com.example.registration.model.User;
-import com.example.registration.repository.RoleRepository;
 import com.example.registration.repository.UserRepository;
 import com.example.registration.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -18,29 +17,28 @@ import java.util.Optional;
 public class UserEntityImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
 
     @Autowired
-    public UserEntityImpl(UserRepository userRepository, RoleRepository roleRepository) {
+    public UserEntityImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
     }
 
     //TODO add convert entity UserDTO
+
     @Override
-    public UserDTO findByUsername(String username) {
-        UserDTO result = userRepository.findByUsername(username);
+    public Optional<User> findByUsername(String username) {
+        Optional<User> result = userRepository.findByUsername(username);
         log.info("In findByUsername - user {} ", result, username);
         return result;
     }
 
     //TODO посмотреть как сделать через ifPresent() Java8
     @Override
-    public UserDTO loadUserByUsername(String username) throws UsernameNotFoundException {
+    public Optional<UserDTO> loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<User> user = userRepository.findByUsername(username);
 
         if (user.isPresent()){
-            return UserDTO.convertToDTO(user.get());
+            return Optional.ofNullable(UserDTO.convertToDTO(user.get()));
         }else{
             throw new UsernameNotFoundException("User ".concat(username).concat(" not found"));
         }
@@ -54,7 +52,7 @@ public class UserEntityImpl implements UserService {
     }
 
     @Override
-    public User findById(Long id) {
+    public Optional<User> findById(Long id) {
         User result = userRepository.findById(id).orElse(null);
 
         if (result == null){
@@ -62,7 +60,7 @@ public class UserEntityImpl implements UserService {
             return null;
         }
         log.info("IN findById - user: {} found by id: {}", result);
-        return result;
+        return Optional.of(result);
     }
 
     @Override
