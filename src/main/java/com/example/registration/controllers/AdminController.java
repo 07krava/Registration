@@ -34,7 +34,7 @@ public class AdminController {
     public ResponseEntity<UserDTO> getUserById(@PathVariable(name = "id") Long id) {
 
         //TODO rewrite using optional.isPresent or optional.ifPresent
-        Optional<User> user = userService.findById(id);
+        Optional<User> user = userService.findUserById(id);
 
         if (user.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
