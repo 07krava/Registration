@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -28,8 +29,8 @@ public class AdminController {
 
     @GetMapping(value = "/user/{id}")
     public ResponseEntity<UserDTO> getUserById(@PathVariable(name = "id") Long id) {
-        UserDTO user = userService.findById(id);
-        if (user == null){
+        UserDTO user = userService.findUserById(id);
+        if (user == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(user, HttpStatus.OK);
@@ -37,7 +38,7 @@ public class AdminController {
 
     @GetMapping(value = "/allUsers")
     public ResponseEntity<List<User>> getAllUsers() {
-        List<User> users = userService.getAll();
+        List<User> users = userService.getAllUsers();
         if (users.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -46,7 +47,8 @@ public class AdminController {
 
     @DeleteMapping(value = "/deleteUser/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable("id") Long id) {
-        userService.delete(id);
+        userService.deleteUser(id);
         return new ResponseEntity<>("User deleted", HttpStatus.OK);
     }
+
 }
