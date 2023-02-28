@@ -1,9 +1,9 @@
 package com.example.registration.controllers;
 
-import com.example.registration.dto.AdminUserDao;
 import com.example.registration.dto.RoomDto;
+import com.example.registration.dto.UserDTO;
 import com.example.registration.model.Room;
-import com.example.registration.model.UserEntity;
+import com.example.registration.model.User;
 import com.example.registration.service.RoomService;
 import com.example.registration.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -13,12 +13,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RestController
 @RequestMapping("/api/admin/")
 public class AdminController {
-
+    //TODO please do all this instructions in every files, you can do it any time and before commit too
+    // 1) reformat all files in project got to -> Code -> Reformat code
+    // 2) optimize imports go to Code -> Optimize imports
+    // 3) after finishing making task which is described in todo, you can remove it(just delete TODO comments)
     private final UserService userService;
     private final RoomService roomService;
 
@@ -28,37 +32,38 @@ public class AdminController {
         this.userService = userService;
     }
 
-        @GetMapping(value = "users/{id}")
-        public ResponseEntity<AdminUserDao> getUserById(@PathVariable(name = "id") Long id){
-            UserEntity user = userService.findById(id);
+    @GetMapping(value = "users/{id}")
+    public ResponseEntity<UserDTO> getUserById(@PathVariable(name = "id") Long id) {
+        //TODO rewrite using optional.isPresent or optional.ifPresent
+        Optional<User> user = userService.findById(id);
 
-            if (user == null){
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            }
-            AdminUserDao result = AdminUserDao.fromUserEntity(user);
-            return new ResponseEntity<>(result, HttpStatus.OK);
+        if (user.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
+        UserDTO result = UserDTO.convertToDTO(user.get());
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
 
-        @GetMapping(value = "allUsers")
-        public ResponseEntity <List<UserEntity>> getAllUsers(){
-        List<UserEntity> users = userService.getAll();
+    @GetMapping(value = "allUsers")
+    public ResponseEntity<List<User>> getAllUsers() {
+        List<User> users = userService.getAll();
 
-        if (users.isEmpty()){
+        if (users.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(users, HttpStatus.OK) ;
-        }
+        return new ResponseEntity<>(users, HttpStatus.OK);
+    }
 
-        @DeleteMapping(value = "delete/{id}")
-        public ResponseEntity<String> deleteUser(@PathVariable("id") Long id){
+    @DeleteMapping(value = "delete/{id}")
+    public ResponseEntity<String> deleteUser(@PathVariable("id") Long id) {
         userService.delete(id);
         return new ResponseEntity<>("User deleted", HttpStatus.OK);
-        }
+    }
 
     @PostMapping("addRoom")
-    public ResponseEntity<String> createRoom(@RequestBody RoomDto roomDto){
+    public ResponseEntity<String> createRoom(@RequestBody RoomDto roomDto) {
 
-        if (roomDto == null){
+        if (roomDto == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         Room room = new Room();
@@ -72,10 +77,10 @@ public class AdminController {
     }
 
     @PutMapping(value = "updateRoom/{id}")
-    public ResponseEntity<Room> updateRoom(@PathVariable("id") Long id, @RequestBody Room rooms){
+    public ResponseEntity<Room> updateRoom(@PathVariable("id") Long id, @RequestBody Room rooms) {
         Room room = roomService.findById(id);
 
-        if (room == null){
+        if (room == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         room.setTitle(rooms.getTitle());
@@ -88,7 +93,7 @@ public class AdminController {
     }
 
     @DeleteMapping(value = "deleteRoom/{id}")
-    public ResponseEntity<String> deleteRoom(@PathVariable("id") Long id){
+    public ResponseEntity<String> deleteRoom(@PathVariable("id") Long id) {
         roomService.deleteRoomId(id);
         return new ResponseEntity<>("Room deleted", HttpStatus.OK);
     }

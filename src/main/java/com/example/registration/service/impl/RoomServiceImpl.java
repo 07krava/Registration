@@ -1,10 +1,7 @@
 package com.example.registration.service.impl;
 
-
-import com.example.registration.dto.RoomDto;
-import com.example.registration.model.Order;
 import com.example.registration.model.Room;
-import com.example.registration.model.UserEntity;
+import com.example.registration.model.User;
 import com.example.registration.repository.RoomRepository;
 import com.example.registration.service.OrderService;
 import com.example.registration.service.RoomService;
@@ -15,8 +12,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -68,17 +65,18 @@ public class RoomServiceImpl implements RoomService {
     @Override
     @Transactional
     public void addToUserOrder(Long roomId, String username) {
-        UserEntity user = userService.findByUsername(username);
-        if (user == null){
+        Optional <User> user = userService.findByUsername(username);
+        if (user.isPresent()){
             throw new UsernameNotFoundException("User not found - " + username);
         }
-        Order order = user.getOrder();
-        if (order == null){
-            Order newOrder = orderService.createOrder(user, Collections.singletonList(roomId));
-            user.setOrder(newOrder);
-            userService.save(user);
-        }else {
-            orderService.addRooms(order, Collections.singletonList(roomId));
-        }
+//
+//        Order order = user.get();
+//        if (order == null){
+//            Order newOrder = orderService.createOrder(user.get(), Collections.singletonList(roomId));
+//            user.setOrder(newOrder);
+//            userService.save(user.get());
+//        }else {
+//            orderService.addRooms(order, Collections.singletonList(roomId));
+//        }
     }
 }

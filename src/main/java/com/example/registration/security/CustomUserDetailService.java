@@ -1,7 +1,6 @@
 package com.example.registration.security;
 
 import com.example.registration.model.Role;
-import com.example.registration.model.UserEntity;
 import com.example.registration.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -13,7 +12,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,10 +29,15 @@ public class CustomUserDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserEntity user = userRepository.findByUsername(username);
-        return new User(user.getUsername(), user.getPassword(), mapRolesToAuthorities(user.getRoles()));
+        Optional<com.example.registration.model.User> byUsername = userRepository.findByUsername(username);
+        if (byUsername.isPresent()) {
+            com.example.registration.model.User user = byUsername.get();
+            return new User(user.getUsername(), user.getPassword(), mapRolesToAuthorities(Collections.singletonList(user.getRole())));
+        }
+        return null;
     }
 
+    //TODO refactor
     private Collection<GrantedAuthority> mapRolesToAuthorities(List<Role> roles){
         return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
     }

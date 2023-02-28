@@ -1,17 +1,38 @@
 package com.example.registration.model;
 
-import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
 
-@Setter
-@Getter
-@Entity
-@Table(name = "roles")
-public class Role {
+public enum Role implements GrantedAuthority {
+    ADMIN(1, "ADMIN"),
+    USER(2, "USER"),
+    OWNER(3, "OWNER") ;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
     private String name;
+
+    Role(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String getAuthority() {
+        return name();
+    }
 }
