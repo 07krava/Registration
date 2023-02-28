@@ -17,7 +17,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/room")
+@RequestMapping("/api/user")
 public class RoomController {
 
     private final RoomService roomService;
@@ -28,7 +28,7 @@ public class RoomController {
     }
 
     @GetMapping(value = "allRooms")
-    public ResponseEntity<List<Room>> getAllUsers(){
+    public ResponseEntity<List<Room>> getAllRooms(){
         List<Room> rooms = roomService.getAllRooms();
 
         if (rooms.isEmpty()){
@@ -37,8 +37,8 @@ public class RoomController {
         return new ResponseEntity<>(rooms, HttpStatus.OK) ;
     }
 
-    @GetMapping(value = "{id}")
-    public ResponseEntity<Room> getUserById(@PathVariable(name = "id") Long roomId){
+    @GetMapping(value = "room/{id}")
+    public ResponseEntity<Room> getRoomById(@PathVariable(name = "id") Long roomId){
         if (roomId == null){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
