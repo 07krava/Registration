@@ -32,11 +32,13 @@ public class AdminController {
 
     @GetMapping(value = "/user/{id}")
     public ResponseEntity<UserDTO> getUserById(@PathVariable(name = "id") Long id) {
-        UserDTO user = userService.findUserById(id);
-        if (user == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        Optional<User> user = userService.findUserById(id);
+
+        if (user.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        UserDTO result = UserDTO.convertToDto(user.get());
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @GetMapping(value = "/allUsers")
