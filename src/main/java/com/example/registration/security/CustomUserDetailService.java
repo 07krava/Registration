@@ -30,11 +30,8 @@ public class CustomUserDetailService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<com.example.registration.model.User> byUsername = userRepository.findByUsername(username);
-        if (byUsername.isPresent()) {
             com.example.registration.model.User user = byUsername.get();
             return new User(user.getUsername(), user.getPassword(), mapRolesToAuthorities(Collections.singletonList(user.getRole())));
-        }
-        return null;
     }
 
     private Collection<GrantedAuthority> mapRolesToAuthorities(List<Role> roles){
