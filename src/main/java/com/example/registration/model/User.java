@@ -29,7 +29,7 @@ public class User {
     private Role role;
 
     @OneToMany
-    @JoinColumn(name = "order_id")
+    @JoinColumn(name = "orders_id")
     private List<Order> orders;
 
 }

@@ -62,6 +62,4 @@ public class AuthController {
 
         return new ResponseEntity<>("User register success!", HttpStatus.OK);
     }
-
-
 }
