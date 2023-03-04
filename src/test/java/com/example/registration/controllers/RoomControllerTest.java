@@ -19,14 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-<<<<<<< HEAD
-<<<<<<< HEAD
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-=======
->>>>>>> 2950dcf (sex with Mockito and JUnit)
-=======
->>>>>>> 2950dcf (sex with Mockito and JUnit)
 
 @SpringJUnitConfig
 class RoomControllerTest {
@@ -41,7 +33,6 @@ class RoomControllerTest {
 =======
     private RoomRepository roomRepository;
     @Mock
->>>>>>> 2950dcf (sex with Mockito and JUnit)
     private UserService userService;
     @Mock
     private OrderService orderService;
@@ -67,18 +58,6 @@ class RoomControllerTest {
 
     @Test
     void getRoomById() {
-<<<<<<< HEAD
-<<<<<<< HEAD
-        Mockito.when(roomService.findById(1L)).thenReturn(new Room(1L, 1, BigDecimal.valueOf(100), "good room"));
-
-        Room room = roomService.findById(1L);
-        assertEquals("good room", room.getTitle());
-        assertEquals(1, room.getNumber());
-        assertEquals(BigDecimal.valueOf(100), room.getPrice());
-=======
->>>>>>> 2950dcf (sex with Mockito and JUnit)
-=======
->>>>>>> 2950dcf (sex with Mockito and JUnit)
     }
 
     @Test
