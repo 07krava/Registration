@@ -1,12 +1,11 @@
 package com.example.registration.service.impl;
 
+import com.example.registration.dto.UserDTO;
 import com.example.registration.model.Room;
-import com.example.registration.model.User;
 import com.example.registration.repository.RoomRepository;
 import com.example.registration.service.OrderService;
 import com.example.registration.service.RoomService;
 import com.example.registration.service.UserService;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -42,7 +41,7 @@ public class RoomServiceImpl implements RoomService {
     public Room findById(Long id) {
         Room room = roomRepository.findById(id).orElse(null);
 
-        if (room == null){
+        if (room == null) {
             log.warn("IN findById - no room found by id: {}", id);
             return null;
         }
@@ -53,7 +52,7 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public void save(Room room) {
         log.info("IN roomServiceImpl save {} " + room);
-        roomRepository.save(room);
+        roomRepository.save(room);;
     }
 
     @Override
@@ -66,8 +65,8 @@ public class RoomServiceImpl implements RoomService {
     @Override
     @Transactional
     public void addToUserOrder(Long roomId, String username) {
-        Optional <User> user = userService.findByUsername(username);
-        if (user.isPresent()){
+        Optional<UserDTO> user = Optional.ofNullable(userService.findByUsername(username));
+        if (user.isPresent()) {
             throw new UsernameNotFoundException("User not found - " + username);
         }
 //

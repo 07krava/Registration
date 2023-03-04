@@ -32,7 +32,7 @@ public class AdminController {
         this.userService = userService;
     }
 
-    @GetMapping(value = "users/{id}")
+    @GetMapping(value = "user/{id}")
     public ResponseEntity<UserDTO> getUserById(@PathVariable(name = "id") Long id) {
         Optional<User> user = userService.findById(id);
 
