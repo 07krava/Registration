@@ -19,12 +19,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @SpringJUnitConfig
 class RoomControllerTest {
 
-    @Mock
-    private RoomRepository roomRepository;
     @Mock
     private UserService userService;
     @Mock
@@ -51,6 +51,12 @@ class RoomControllerTest {
 
     @Test
     void getRoomById() {
+        Mockito.when(roomService.findById(1L)).thenReturn(new Room(1L, 1, BigDecimal.valueOf(100), "good room"));
+
+        Room room = roomService.findById(1L);
+        assertEquals("good room", room.getTitle());
+        assertEquals(1, room.getNumber());
+        assertEquals(BigDecimal.valueOf(100), room.getPrice());
     }
 
     @Test
