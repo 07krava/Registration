@@ -58,4 +58,41 @@ public class AdminController {
         return new ResponseEntity<>("User deleted", HttpStatus.OK);
     }
 
+    @PostMapping("addRoom")
+    public ResponseEntity<String> createRoom(@RequestBody RoomDto roomDto) {
+
+        if (roomDto == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        Room room = new Room();
+        room.setTitle(roomDto.getTitle());
+        room.setNumber(roomDto.getNumber());
+        room.setPrice(roomDto.getPrice());
+
+        roomService.save(room);
+
+        return new ResponseEntity<>("Room added success!", HttpStatus.OK);
+    }
+
+    @PutMapping(value = "updateRoom/{id}")
+    public ResponseEntity<Room> updateRoom(@PathVariable("id") Long id, @RequestBody Room rooms) {
+        Room room = roomService.findById(id);
+
+        if (room == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        room.setTitle(rooms.getTitle());
+        room.setNumber(rooms.getNumber());
+        room.setPrice(rooms.getPrice());
+
+        roomService.save(room);
+
+        return new ResponseEntity<>(room, HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "deleteRoom/{id}")
+    public ResponseEntity<String> deleteRoom(@PathVariable("id") Long id) {
+        roomService.deleteRoomId(id);
+        return new ResponseEntity<>("Room deleted", HttpStatus.OK);
+    }
 }
