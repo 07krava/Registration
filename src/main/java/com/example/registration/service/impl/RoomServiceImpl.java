@@ -6,7 +6,6 @@ import com.example.registration.repository.RoomRepository;
 import com.example.registration.service.OrderService;
 import com.example.registration.service.RoomService;
 import com.example.registration.service.UserService;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
