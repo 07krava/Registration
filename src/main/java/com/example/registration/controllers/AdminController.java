@@ -32,7 +32,7 @@ public class AdminController {
 
     @GetMapping(value = "/user/{id}")
     public ResponseEntity<UserDTO> getUserById(@PathVariable(name = "id") Long id) {
-        Optional<User> user = userService.findById(id);
+        Optional<User> user = userService.findUserById(id);
 
         if (user.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -43,7 +43,7 @@ public class AdminController {
 
     @GetMapping(value = "/allUsers")
     public ResponseEntity<List<User>> getAllUsers() {
-        List<User> users = userService.getAll();
+        List<User> users = userService.getAllUsers();
 
         if (users.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
