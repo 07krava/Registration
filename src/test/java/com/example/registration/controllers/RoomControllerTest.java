@@ -24,13 +24,6 @@ import static org.junit.jupiter.api.Assertions.*;
 class RoomControllerTest {
 
     @Mock
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-    private RoomRepository roomRepository;
-    @Mock
->>>>>>> 2950dcf (sex with Mockito and JUnit)
-=======
     private RoomRepository roomRepository;
     @Mock
     private UserService userService;
