@@ -30,7 +30,7 @@ public class Order {
     private User user;
     @ManyToOne
     @JoinColumn(name = "room_id")
-    private Room room;
+    private Housing room;
     @Column(name = "summa")
     private BigDecimal sum;
     @Column(name = "address")
