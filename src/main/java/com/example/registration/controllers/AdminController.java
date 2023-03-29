@@ -1,6 +1,7 @@
 package com.example.registration.controllers;
 
 import com.example.registration.dto.UserDTO;
+import com.example.registration.model.Housing;
 import com.example.registration.model.User;
 import com.example.registration.service.HousingService;
 import com.example.registration.service.UserService;
@@ -9,8 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -20,10 +24,9 @@ public class AdminController {
     private final UserService userService;
     private final HousingService housingService;
 
-    @Autowired
     public AdminController(UserService userService, HousingService housingService) {
-        this.housingService = housingService;
         this.userService = userService;
+        this.housingService = housingService;
     }
 
     @GetMapping(value = "/user/{id}")
@@ -38,13 +41,14 @@ public class AdminController {
     @GetMapping(value = "/allUsers")
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> users = userService.getAll();
+
         if (users.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-    @DeleteMapping(value = "/deleteUser/{id}")
+    @DeleteMapping(value = "delete/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable("id") Long id) {
         userService.delete(id);
         return new ResponseEntity<>("User deleted", HttpStatus.OK);

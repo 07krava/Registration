@@ -18,28 +18,21 @@ public class ImageDTO {
     private Housing housing;
     private byte[] data;
 
-    public static ImageDTO convertToDTO(Image photoEntity) {
-        ImageDTO photoDTO = new ImageDTO();
-        photoDTO.setId(photoEntity.getId());
-        photoDTO.setFileName(photoEntity.getFileName());
-        photoDTO.setHousing(photoEntity.getHousing());
-        photoDTO.setData(photoEntity.getData());
-        return photoDTO;
+    public static ImageDTO convertToDTO(Image imageEntity) {
+        ImageDTO imageDTO = new ImageDTO();
+        imageDTO.setId(imageEntity.getId());
+        imageDTO.setFileName(imageEntity.getFileName());
+        imageDTO.setHousing(imageEntity.getHousing());
+        imageDTO.setData(imageEntity.getData());
+        return imageDTO;
     }
 
-    public static Image convertToPhoto(ImageDTO imageDTO) {
+    public static Image convertToPhoto(ImageDTO imageDTO){
         Image image = new Image();
         image.setId(imageDTO.getId());
         image.setFileName(imageDTO.getFileName());
         image.setHousing(imageDTO.getHousing());
         image.setData(imageDTO.getData());
         return image;
-    }
-
-    public ImageDTO convertMultipartFileToPhotoDTO(MultipartFile file, Long id) {
-        ImageDTO photoDTO = new ImageDTO();
-        photoDTO.setId(id);
-        photoDTO.setFileName(file.getOriginalFilename());
-        return photoDTO;
     }
 }

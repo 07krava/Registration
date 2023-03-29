@@ -77,6 +77,19 @@ public class HousingServiceImpl implements HousingService {
 
         // Update photos of HousingEntity based on files
         if (files != null && files.length > 0) {
+            List<Image> photoEntities = new ArrayList<>();
+            for (MultipartFile file : files) {
+
+                List<Image> imageList = housingEntity.getImages();
+                for (Image image : imageList) {
+                    image.setId(image.getId());
+                    image.setFileName(file.getOriginalFilename());
+                    image.setData(file.getBytes());
+                    image.setHousing(housingEntity);
+                    photoEntities.add(image);
+                }
+            }
+            housingEntity.setImages(photoEntities);
             List<Image> imageEntities = new ArrayList<>();
             for (MultipartFile file : files) {
 
@@ -98,38 +111,18 @@ public class HousingServiceImpl implements HousingService {
 
     @Override
     public List<ImageDTO> getImagesByHousingId(Long housingId) {
-            List<ImageDTO> imageDTOS = new ArrayList<>();
-            Optional<Housing> housingOptional = housingRepository.findById(housingId);
-            if (housingOptional.isPresent()) {
-                Housing housing = housingOptional.get();
-                List<Image> photos = housing.getImages();
-                if (photos != null) {
-                    imageDTOS = photos.stream()
-                            .map(photo -> ImageDTO.builder()
-                                    .id(photo.getId())
-                                    .fileName(photo.getFileName())
-                                    .data(photo.getData())
-                                    .build())
-                            .collect(Collectors.toList());
-                }
-            }
-            return imageDTOS;
+        Optional<Housing> optionalHousing = housingRepository.findById(housingId);
+        if (!optionalHousing.isPresent()) {
+            throw new EntityNotFoundException("Housing not found with id: " + housingId);
+        }
+        Housing housingEntity = optionalHousing.get();
+
+        List<ImageDTO> photoDTOS = new ArrayList<>();
+        for (Image photoEntity : housingEntity.getImages()) {
+            photoDTOS.add(ImageDTO.convertToDTO(photoEntity));
         }
 
-    @Override
-    public Image getImageByIdFromHousingId(Long housingId, Long imageId) {
-        Housing housing = housingRepository.findById(housingId).orElseThrow(() -> new EntityNotFoundException("Housing not found with id " + housingId));
-        Image image = null;
-        for (Image p : housing.getImages()) {
-            if (p.getId().equals(imageId)) {
-                image = p;
-                break;
-            }
-        }
-        if (image == null) {
-            throw new EntityNotFoundException();
-        }
-        return image;
+        return photoDTOS;
     }
 
     //worked
@@ -141,6 +134,7 @@ public class HousingServiceImpl implements HousingService {
         for (Housing housingEntity : housingEntities) {
             housingDTOS.add(convertToDTO(housingEntity));
         }
+
         return housingDTOS;
     }
 
@@ -156,17 +150,6 @@ public class HousingServiceImpl implements HousingService {
         } else {
             throw new EntityNotFoundException("Housing not found with id: " + id);
         }
-    }
-
-    @Override
-    public void deleteImageByIdFromHousingId(Long housingId, Long imageId) {
-        Housing housing = housingRepository.findById(housingId).orElseThrow(EntityNotFoundException::new);
-        Image image = housing.getImages().stream()
-                .filter(p -> p.getId().equals(imageId))
-                .findFirst()
-                .orElseThrow(() -> new EntityNotFoundException("Image not found with id " + imageId));
-        housing.getImages().remove(image);
-        imageRepository.deleteById(imageId);
     }
 
     //worked
