@@ -40,6 +40,7 @@ public class HousingServiceImpl implements HousingService {
     @Override
     public HousingDTO createHousing(HousingDTO housingDTO, MultipartFile[] files) throws IOException {
         Housing housingEntity = new Housing();
+        housingEntity.setNumber(housingDTO.getNumber());
         housingEntity.setDescription(housingDTO.getDescription());
         housingEntity.setLocation(housingDTO.getLocation());
         housingEntity.setTitle(housingDTO.getTitle());
@@ -48,11 +49,11 @@ public class HousingServiceImpl implements HousingService {
 
         List<Image> imageEntities = new ArrayList<>();
         for (MultipartFile file : files) {
-            ImageDTO imageDTO = new ImageDTO();
-            imageDTO.setFileName(file.getOriginalFilename());
-            imageDTO.setData(file.getBytes());
-            imageDTO.setHousing(housingEntity);
-            imageEntities.add(convertToPhoto(imageDTO));
+            ImageDTO photoDTO = new ImageDTO();
+            photoDTO.setFileName(file.getOriginalFilename());
+            photoDTO.setData(file.getBytes());
+            photoDTO.setHousing(housingEntity);
+            imageEntities.add(convertToPhoto(photoDTO));
 
         }
         housingEntity.setImages(imageEntities);
@@ -69,6 +70,7 @@ public class HousingServiceImpl implements HousingService {
                 .orElseThrow(() -> new EntityNotFoundException("Housing not found with id " + housingId));
 
         // Update fields of HousingEntity based on HousingDTO
+        housingEntity.setNumber(housingDTO.getNumber());
         housingEntity.setTitle(housingDTO.getTitle());
         housingEntity.setDescription(housingDTO.getDescription());
         housingEntity.setLocation(housingDTO.getLocation());
@@ -77,7 +79,7 @@ public class HousingServiceImpl implements HousingService {
 
         // Update photos of HousingEntity based on files
         if (files != null && files.length > 0) {
-            List<Image> photoEntities = new ArrayList<>();
+            List<Image> imageEntities = new ArrayList<>();
             for (MultipartFile file : files) {
 
                 List<Image> imageList = housingEntity.getImages();
@@ -86,20 +88,7 @@ public class HousingServiceImpl implements HousingService {
                     image.setFileName(file.getOriginalFilename());
                     image.setData(file.getBytes());
                     image.setHousing(housingEntity);
-                    photoEntities.add(image);
-                }
-            }
-            housingEntity.setImages(photoEntities);
-            List<Image> imageEntities = new ArrayList<>();
-            for (MultipartFile file : files) {
-
-                List<Image> imageList = housingEntity.getImages();
-                for (Image photoDTO1 : imageList) {
-                    photoDTO1.setId(photoDTO1.getId());
-                    photoDTO1.setFileName(file.getOriginalFilename());
-                    photoDTO1.setData(file.getBytes());
-                    photoDTO1.setHousing(housingEntity);
-                    imageEntities.add(photoDTO1);
+                    imageEntities.add(image);
                 }
             }
             housingEntity.setImages(imageEntities);
@@ -108,7 +97,7 @@ public class HousingServiceImpl implements HousingService {
 
         return convertToDTO(savedHousing);
     }
-
+    //Don't work
     @Override
     public List<ImageDTO> getImagesByHousingId(Long housingId) {
         Optional<Housing> optionalHousing = housingRepository.findById(housingId);
@@ -117,12 +106,11 @@ public class HousingServiceImpl implements HousingService {
         }
         Housing housingEntity = optionalHousing.get();
 
-        List<ImageDTO> photoDTOS = new ArrayList<>();
-        for (Image photoEntity : housingEntity.getImages()) {
-            photoDTOS.add(ImageDTO.convertToDTO(photoEntity));
+        List<ImageDTO> imageDTOS = new ArrayList<>();
+        for (Image imageEntity : housingEntity.getImages()) {
+            imageDTOS.add(ImageDTO.convertToDTO(imageEntity));
         }
-
-        return photoDTOS;
+        return imageDTOS;
     }
 
     //worked

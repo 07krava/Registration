@@ -1,13 +1,13 @@
 package com.example.registration.controllers;
 
 import com.example.registration.dto.HousingDTO;
-import com.example.registration.dto.ImageDTO;
-import com.example.registration.model.Housing;
 import com.example.registration.service.HousingService;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,15 +17,16 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+
 @ExtendWith(MockitoExtension.class)
 class HousingControllerTest {
+
 
     @InjectMocks
     private HousingController housingController;
@@ -52,6 +53,7 @@ class HousingControllerTest {
         assertEquals(housingDTO, responseEntity.getBody());
     }
 
+
     @Test
     void testGetAllHousing() {
 
@@ -70,7 +72,6 @@ class HousingControllerTest {
         assertEquals(housing1.getTitle(), responseList.get(0).getTitle());
         assertEquals(housing2.getTitle(), responseList.get(1).getTitle());
     }
-
 
     @Test
     void testUpdateHousing() throws IOException {

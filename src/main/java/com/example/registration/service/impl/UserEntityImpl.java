@@ -45,33 +45,33 @@ public class UserEntityImpl implements UserService {
     }
 
     @Override
-    public List<User> getAll() {
+    public List<User> getAllUsers() {
         List<User> result = userRepository.findAll();
         log.info("IN getAll - {} users found", result.size());
         return result;
     }
 
     @Override
-    public UserDTO findById(Long id) {
-        UserDTO result = UserDTO.convertToDTO(userRepository.findById(id).orElse(null));
+    public Optional<User> findUserById(Long id) {
+        User result = userRepository.findById(id).orElse(null);
 
         if (result == null){
             log.warn("IN findById - no user found by id: {}", id);
             return null;
         }
         log.info("IN findById - user: {} found by id: {}", result);
-        return result;
+        return Optional.of(result);
     }
 
     @Override
-    public void delete(Long id) {
+    public void deleteUser(Long id) {
         User user = userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("User could not be delete"));
         userRepository.delete(user);
         log.info("IN delete - user with id: {} successfully deleted");
     }
 
     @Override
-    public void save(User user) {
+    public void saveUser(User user) {
         log.info("IN userServiceImpl save {} " + user);
         userRepository.save(user);
     }

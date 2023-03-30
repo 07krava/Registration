@@ -16,6 +16,7 @@ import java.util.List;
 
 @Service
 public class ImageServiceImpl implements ImageService {
+
     private ImageRepository imageRepository;
 
     @Autowired
@@ -33,7 +34,12 @@ public class ImageServiceImpl implements ImageService {
 
         return convertToDTO(savedImageEntity);
     }
+
     @Override
+    public ImageDTO saveImage(MultipartFile file, Housing housing) throws IOException {
+        return null;
+    }
+
     public List<ImageDTO> saveImages(MultipartFile[] files, Housing housingEntity) throws IOException {
         List<ImageDTO> imageDTOS = new ArrayList<>();
 
