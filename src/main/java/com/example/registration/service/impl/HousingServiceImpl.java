@@ -45,16 +45,16 @@ public class HousingServiceImpl implements HousingService {
         housingEntity.setAmount(housingDTO.getAmount());
         housingEntity.setPrice(housingDTO.getPrice());
 
-        List<Image> photoEntities = new ArrayList<>();
+        List<Image> imageEntities = new ArrayList<>();
         for (MultipartFile file : files) {
             ImageDTO photoDTO = new ImageDTO();
             photoDTO.setFileName(file.getOriginalFilename());
             photoDTO.setData(file.getBytes());
             photoDTO.setHousing(housingEntity);
-            photoEntities.add(convertToPhoto(photoDTO));
+            imageEntities.add(convertToPhoto(photoDTO));
 
         }
-        housingEntity.setImages(photoEntities);
+        housingEntity.setImages(imageEntities);
 
         Housing savedHousing = housingRepository.save(housingEntity);
 
@@ -77,7 +77,7 @@ public class HousingServiceImpl implements HousingService {
 
         // Update photos of HousingEntity based on files
         if (files != null && files.length > 0) {
-            List<Image> photoEntities = new ArrayList<>();
+            List<Image> imageEntities = new ArrayList<>();
             for (MultipartFile file : files) {
 
                 List<Image> imageList = housingEntity.getImages();
@@ -86,16 +86,16 @@ public class HousingServiceImpl implements HousingService {
                     image.setFileName(file.getOriginalFilename());
                     image.setData(file.getBytes());
                     image.setHousing(housingEntity);
-                    photoEntities.add(image);
+                    imageEntities.add(image);
                 }
             }
-            housingEntity.setImages(photoEntities);
+            housingEntity.setImages(imageEntities);
         }
         Housing savedHousing = housingRepository.save(housingEntity);
 
         return convertToDTO(savedHousing);
     }
-
+    //Don't work
     @Override
     public List<ImageDTO> getImagesByHousingId(Long housingId) {
         Optional<Housing> optionalHousing = housingRepository.findById(housingId);
@@ -104,12 +104,11 @@ public class HousingServiceImpl implements HousingService {
         }
         Housing housingEntity = optionalHousing.get();
 
-        List<ImageDTO> photoDTOS = new ArrayList<>();
-        for (Image photoEntity : housingEntity.getImages()) {
-            photoDTOS.add(ImageDTO.convertToDTO(photoEntity));
+        List<ImageDTO> imageDTOS = new ArrayList<>();
+        for (Image imageEntity : housingEntity.getImages()) {
+            imageDTOS.add(ImageDTO.convertToDTO(imageEntity));
         }
-
-        return photoDTOS;
+        return imageDTOS;
     }
 
     //worked

@@ -29,23 +29,23 @@ public class OrderServiceImpl implements OrderService {
     public Order createOrder(User user, List<Long> roomId) {
         Order order = new Order();
         order.setUser(user);
-        List<Housing> roomList = getRoomById(roomId);
+        List<Housing> roomList = getHousingById(roomId);
         order.setRoom((Housing) roomList);
         return null;
     }
 
-    private List<Housing> getRoomById(List<Long> roomId){
+    private List<Housing> getHousingById(List<Long> roomId){
         return roomId.stream()
                 .map(housingRepository::getOne)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public void addRooms(Order order, List<Long> roomId) {
+    public void addHousing(Order order, List<Long> roomId) {
 
         List<Housing> rooms = (List<Housing>) order.getRoom();
         List<Housing> newRoomList = rooms == null ? new ArrayList<>() : new ArrayList<>(rooms);
-        newRoomList.addAll(getRoomById(roomId));
+        newRoomList.addAll(getHousingById(roomId));
         //TODO Casting 'newRoomList' to 'Room' will produce 'ClassCastException' for any non-null value
         order.setRoom((Housing) newRoomList);
         orderRepository.save(order);

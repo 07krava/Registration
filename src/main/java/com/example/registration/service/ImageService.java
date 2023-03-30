@@ -13,9 +13,9 @@ public interface ImageService {
 
     List<ImageDTO> saveImages(MultipartFile[] files, Housing housing) throws IOException;
 
-    ImageDTO getPhotoById(Long photoId);
+    ImageDTO getImageById(Long photoId);
 
-    void deletePhotoById(Long id);
+    void deleteImageById(Long id);
 
-    void deletePhotosByHousingId(Long housingId);
+    void deleteImagesByHousingId(Long housingId);
 }

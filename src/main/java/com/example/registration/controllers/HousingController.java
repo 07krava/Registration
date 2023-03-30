@@ -35,7 +35,6 @@ public class HousingController {
     public HousingDTO updateHousing(@PathVariable Long id, @ModelAttribute HousingDTO housingDTO, @RequestParam("file") MultipartFile[] files) throws IOException {
         housingDTO.setId(id);
         return housingService.updateHousing(id, housingDTO, files);
-
     }
 
     @GetMapping("/getImage/{id}")

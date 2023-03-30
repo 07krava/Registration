@@ -45,14 +45,14 @@ public class UserEntityImpl implements UserService {
     }
 
     @Override
-    public List<User> getAll() {
+    public List<User> getAllUsers() {
         List<User> result = userRepository.findAll();
         log.info("IN getAll - {} users found", result.size());
         return result;
     }
 
     @Override
-    public Optional<User> findById(Long id) {
+    public Optional<User> findUserById(Long id) {
         User result = userRepository.findById(id).orElse(null);
 
         if (result == null){
@@ -64,14 +64,14 @@ public class UserEntityImpl implements UserService {
     }
 
     @Override
-    public void delete(Long id) {
+    public void deleteUser(Long id) {
         User user = userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("User could not be delete"));
         userRepository.delete(user);
         log.info("IN delete - user with id: {} successfully deleted");
     }
 
     @Override
-    public void save(User user) {
+    public void saveUser(User user) {
         log.info("IN userServiceImpl save {} " + user);
         userRepository.save(user);
     }

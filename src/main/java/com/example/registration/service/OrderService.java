@@ -9,5 +9,5 @@ public interface OrderService {
 
     Order createOrder(User user, List<Long> roomId);
 
-    void addRooms(Order order, List<Long> roomId);
+    void addHousing(Order order, List<Long> roomId);
 }

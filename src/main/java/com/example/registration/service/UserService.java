@@ -17,11 +17,11 @@ public interface UserService {
     //TODO посмотреть как сделать через ifPresent() Java8
     Optional<UserDTO> loadUserByUsername(String username) throws UsernameNotFoundException;
 
-    List<User> getAll();
+    List<User> getAllUsers();
 
-    Optional<User> findById(Long id);
+    Optional<User> findUserById(Long id);
 
-    void delete(Long id);
+    void deleteUser(Long id);
 
-    void save(User user);
+    void saveUser(User user);
 }

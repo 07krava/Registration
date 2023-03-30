@@ -21,8 +21,8 @@ public class ImageServiceImpl implements ImageService {
     public ImageServiceImpl(ImageRepository imageRepository) {
         this.imageRepository = imageRepository;
     }
-
-    public ImageDTO savePhoto(MultipartFile file, Housing housingEntity) throws IOException {
+    @Override
+    public ImageDTO saveImage(MultipartFile file, Housing housingEntity) throws IOException {
         Image imageEntity = new Image();
         imageEntity.setFileName(file.getOriginalFilename());
         imageEntity.setHousing(housingEntity);
@@ -33,33 +33,33 @@ public class ImageServiceImpl implements ImageService {
         return convertToDTO(savedImageEntity);
     }
 
-    @Override
-    public ImageDTO saveImage(MultipartFile file, Housing housing) throws IOException {
-        return null;
-    }
+//    @Override
+//    public ImageDTO saveImage(MultipartFile file, Housing housing) throws IOException {
+//        return null;
+//    }
 
     public List<ImageDTO> saveImages(MultipartFile[] files, Housing housingEntity) throws IOException {
         List<ImageDTO> photoDTOS = new ArrayList<>();
 
         for (MultipartFile file : files) {
-            photoDTOS.add(savePhoto(file, housingEntity));
+            photoDTOS.add(saveImage(file, housingEntity));
         }
 
         return photoDTOS;
     }
 
-    public ImageDTO getPhotoById(Long id) {
+    public ImageDTO getImageById(Long id) {
         Image imageEntity = imageRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Photo not found with id " + id));
 
         return convertToDTO(imageEntity);
     }
 
-    public void deletePhotoById(Long id) {
+    public void deleteImageById(Long id) {
         imageRepository.deleteById(id);
     }
 
-    public void deletePhotosByHousingId(Long housingId) {
+    public void deleteImagesByHousingId(Long housingId) {
         imageRepository.deleteByHousingId(housingId);
     }
 
