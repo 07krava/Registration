@@ -29,8 +29,8 @@ public class Order {
     @JoinColumn(name = "user_id")
     private User user;
     @ManyToOne
-    @JoinColumn(name = "room_id")
-    private Room room;
+    @JoinColumn(name = "housing_id")
+    private Housing housing;
     @Column(name = "summa")
     private BigDecimal sum;
     @Column(name = "address")

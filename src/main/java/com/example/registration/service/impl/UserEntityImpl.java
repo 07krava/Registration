@@ -52,15 +52,15 @@ public class UserEntityImpl implements UserService {
     }
 
     @Override
-    public Optional<User> findById(Long id) {
-        User result = userRepository.findById(id).orElse(null);
+    public UserDTO findById(Long id) {
+        UserDTO result = UserDTO.convertToDTO(userRepository.findById(id).orElse(null));
 
         if (result == null){
             log.warn("IN findById - no user found by id: {}", id);
             return null;
         }
         log.info("IN findById - user: {} found by id: {}", result);
-        return Optional.of(result);
+        return result;
     }
 
     @Override
