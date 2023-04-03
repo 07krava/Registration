@@ -19,7 +19,7 @@ public interface UserService {
 
     List<User> getAll();
 
-    Optional<User> findById(Long id);
+    UserDTO findById(Long id);
 
     void delete(Long id);
 
