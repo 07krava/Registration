@@ -1,14 +1,17 @@
 package com.example.registration.service.impl;
 
+
 import com.example.registration.dto.HousingDTO;
 import com.example.registration.dto.ImageDTO;
 import com.example.registration.model.Housing;
 import com.example.registration.model.Image;
+import com.example.registration.model.Location;
 import com.example.registration.repository.HousingRepository;
 import com.example.registration.repository.ImageRepository;
 import com.example.registration.service.HousingService;
 import com.example.registration.service.ImageService;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,8 +23,10 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.example.registration.dto.HousingDTO.convertToDTO;
-import static com.example.registration.dto.ImageDTO.convertToPhoto;
+import static com.example.registration.dto.HousingDTO.convertToEntity;
+import static com.example.registration.dto.ImageDTO.convertToImage;
 
+@Slf4j
 @Service
 public class HousingServiceImpl implements HousingService {
 
@@ -36,30 +41,57 @@ public class HousingServiceImpl implements HousingService {
         this.imageService = imageService;
     }
 
+    @Override
+    public List<Housing> findByCity(String city) {
+        List<Housing> housings = housingRepository.findAll();
+        List<Housing> result = new ArrayList<>();
+        for (Housing housing : housings) {
+            Location location = housing.getLocation();
+            if (location != null && location.getCity().equals(city)) {
+                result.add(housing);
+            }
+        }
+        return result;
+    }
+
     //worked
     @Override
     public HousingDTO createHousing(HousingDTO housingDTO, MultipartFile[] files) throws IOException {
-        Housing housingEntity = new Housing();
-        housingEntity.setDescription(housingDTO.getDescription());
-        housingEntity.setLocation(housingDTO.getLocation());
-        housingEntity.setTitle(housingDTO.getTitle());
-        housingEntity.setAmount(housingDTO.getAmount());
-        housingEntity.setPrice(housingDTO.getPrice());
+
+        Housing housing = new Housing();
+        housing.setDescription(housingDTO.getDescription());
+        housing.setTitle(housingDTO.getTitle());
+        housing.setAmountPeople(housingDTO.getAmountPeople());
+        housing.setPrice(housingDTO.getPrice());
+        housing.setActive(housingDTO.isActive());
+
+        housingRepository.save(housing);
+
+        // Создание и сохранение объекта Location
+        Location location = new Location();
+        location.setCountry(housingDTO.getLocation().getCountry());
+        location.setRegion(housingDTO.getLocation().getRegion());
+        location.setCity(housingDTO.getLocation().getCity());
+        location.setStreet(housingDTO.getLocation().getStreet());
+        location.setHouseNumber(housingDTO.getLocation().getHouseNumber());
+        location.setApartmentNumber(housingDTO.getLocation().getApartmentNumber());
+        location.setZipCode(housingDTO.getLocation().getZipCode());
+        location.setHousing(housing);
+        housing.setLocation(location);
 
         List<Image> imageEntities = new ArrayList<>();
         for (MultipartFile file : files) {
             ImageDTO imageDTO = new ImageDTO();
             imageDTO.setFileName(file.getOriginalFilename());
             imageDTO.setData(file.getBytes());
-            imageDTO.setHousing(housingEntity);
-            imageEntities.add(convertToPhoto(imageDTO));
-
+            imageDTO.setHousing(housing);
+            imageEntities.add(convertToImage(imageDTO));
         }
-        housingEntity.setImages(imageEntities);
+        housing.setImages(imageEntities);
 
-        Housing savedHousing = housingRepository.save(housingEntity);
+        housingRepository.save(housing);
 
-        return convertToDTO(savedHousing);
+        return convertToDTO(housing);
     }
 
     // worked
@@ -71,9 +103,31 @@ public class HousingServiceImpl implements HousingService {
         // Update fields of HousingEntity based on HousingDTO
         housingEntity.setTitle(housingDTO.getTitle());
         housingEntity.setDescription(housingDTO.getDescription());
-        housingEntity.setLocation(housingDTO.getLocation());
-        housingEntity.setAmount(housingDTO.getAmount());
+        housingEntity.setAmountPeople(housingDTO.getAmountPeople());
         housingEntity.setPrice(housingDTO.getPrice());
+        housingEntity.setActive(housingDTO.isActive());
+
+        Location location = housingEntity.getLocation();
+        if (location != null) {
+            location.setCountry(housingDTO.getLocation().getCountry());
+            location.setRegion(housingDTO.getLocation().getRegion());
+            location.setCity(housingDTO.getLocation().getCity());
+            location.setStreet(housingDTO.getLocation().getStreet());
+            location.setHouseNumber(housingDTO.getLocation().getHouseNumber());
+            location.setApartmentNumber(housingDTO.getLocation().getApartmentNumber());
+            location.setZipCode(housingDTO.getLocation().getZipCode());
+        } else {
+            location = new Location();
+            location.setCountry(housingDTO.getLocation().getCountry());
+            location.setRegion(housingDTO.getLocation().getRegion());
+            location.setCity(housingDTO.getLocation().getCity());
+            location.setStreet(housingDTO.getLocation().getStreet());
+            location.setHouseNumber(housingDTO.getLocation().getHouseNumber());
+            location.setApartmentNumber(housingDTO.getLocation().getApartmentNumber());
+            location.setZipCode(housingDTO.getLocation().getZipCode());
+            location.setHousing(convertToEntity(housingDTO));
+            housingDTO.setLocation(location);
+        }
 
         // Update photos of HousingEntity based on files
         if (files != null && files.length > 0) {
@@ -81,12 +135,11 @@ public class HousingServiceImpl implements HousingService {
             for (MultipartFile file : files) {
 
                 List<Image> imageList = housingEntity.getImages();
-                for (Image photoDTO1 : imageList) {
-                    photoDTO1.setId(photoDTO1.getId());
-                    photoDTO1.setFileName(file.getOriginalFilename());
-                    photoDTO1.setData(file.getBytes());
-                    photoDTO1.setHousing(housingEntity);
-                    imageEntities.add(photoDTO1);
+                for (Image imageDTO1 : imageList) {
+                    imageDTO1.setId(imageDTO1.getId());
+                    imageDTO1.setFileName(file.getOriginalFilename());
+                    imageDTO1.setData(file.getBytes());
+                    imageEntities.add(imageDTO1);
                 }
             }
             housingEntity.setImages(imageEntities);
@@ -96,38 +149,43 @@ public class HousingServiceImpl implements HousingService {
         return convertToDTO(savedHousing);
     }
 
+    // worked
     @Override
     public List<ImageDTO> getImagesByHousingId(Long housingId) {
-            List<ImageDTO> imageDTOS = new ArrayList<>();
-            Optional<Housing> housingOptional = housingRepository.findById(housingId);
-            if (housingOptional.isPresent()) {
-                Housing housing = housingOptional.get();
-                List<Image> photos = housing.getImages();
-                if (photos != null) {
-                    imageDTOS = photos.stream()
-                            .map(photo -> ImageDTO.builder()
-                                    .id(photo.getId())
-                                    .fileName(photo.getFileName())
-                                    .data(photo.getData())
-                                    .build())
-                            .collect(Collectors.toList());
-                }
+        List<ImageDTO> imageDTOList = new ArrayList<>();
+        Optional<Housing> housingOptional = housingRepository.findById(housingId);
+        if (housingOptional.isPresent()) {
+            Housing housing = housingOptional.get();
+            List<Image> images = housing.getImages();
+            if (images != null) {
+                imageDTOList = images.stream()
+                        .map(image -> ImageDTO.builder()
+                                .id(image.getId())
+                                .fileName(image.getFileName())
+                                .data(image.getData())
+                                .build())
+                        .collect(Collectors.toList());
             }
-            return imageDTOS;
         }
+        return imageDTOList;
+    }
 
+    //worked
     @Override
-    public Image getImageByIdFromHousingId(Long housingId, Long imageId) {
+    public Image getImageById(Long housingId, Long imageId) {
+        log.info("Start method getPhotoByIdFromHousingId");
         Housing housing = housingRepository.findById(housingId).orElseThrow(() -> new EntityNotFoundException("Housing not found with id " + housingId));
         Image image = null;
-        for (Image p : housing.getImages()) {
-            if (p.getId().equals(imageId)) {
-                image = p;
-                break;
+        if (housing.getImages() != null) {
+            for (Image p : housing.getImages()) {
+                if (p.getId().equals(imageId) && p.getId() != null) {
+                    image = p;
+                    log.info("We found our image by id " + image);
+                    break;
+                }
             }
-        }
-        if (image == null) {
-            throw new EntityNotFoundException();
+        } else {
+            throw new EntityNotFoundException(" Image this id not found ");
         }
         return image;
     }
@@ -141,12 +199,13 @@ public class HousingServiceImpl implements HousingService {
         for (Housing housingEntity : housingEntities) {
             housingDTOS.add(convertToDTO(housingEntity));
         }
+
         return housingDTOS;
     }
 
     //worked
     @Override
-    public void deleteHousingById(Long id) {
+    public void deleteHousing(Long id) {
         Optional<Housing> housingEntityOptional = housingRepository.findById(id);
 
         if (housingEntityOptional.isPresent()) {
@@ -154,17 +213,18 @@ public class HousingServiceImpl implements HousingService {
             housingRepository.delete(housingEntity);
             System.out.println("Housing delete successfully");
         } else {
-            throw new EntityNotFoundException("Housing not found with id: " + id);
+            throw new NullPointerException("Housing not found with id: " + id);
         }
     }
 
+    //worked
     @Override
     public void deleteImageByIdFromHousingId(Long housingId, Long imageId) {
-        Housing housing = housingRepository.findById(housingId).orElseThrow(EntityNotFoundException::new);
+        Housing housing = housingRepository.findById(housingId).orElseThrow(NullPointerException::new);
         Image image = housing.getImages().stream()
                 .filter(p -> p.getId().equals(imageId))
                 .findFirst()
-                .orElseThrow(() -> new EntityNotFoundException("Image not found with id " + imageId));
+                .orElseThrow(() -> new NullPointerException("Image not found with id " + imageId));
         housing.getImages().remove(image);
         imageRepository.deleteById(imageId);
     }
@@ -173,12 +233,12 @@ public class HousingServiceImpl implements HousingService {
     @Override
     public HousingDTO getHousingById(Long id) {
         Optional<Housing> housingEntityOptional = housingRepository.findById(id);
-
         if (housingEntityOptional.isPresent()) {
             Housing housingEntity = housingEntityOptional.get();
             return convertToDTO(housingEntity);
         } else {
-            throw new EntityNotFoundException("Housing not found with id: " + id);
+            throw new NullPointerException("Housing not found with id: " + id);
         }
     }
 }
+

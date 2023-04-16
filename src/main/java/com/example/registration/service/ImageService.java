@@ -8,13 +8,14 @@ import java.io.IOException;
 import java.util.List;
 
 public interface ImageService {
-    ImageDTO saveImage(MultipartFile file, Housing housing) throws IOException;
 
-    List<ImageDTO> saveImages(MultipartFile[] files, Housing housing) throws IOException;
+        ImageDTO saveImage(MultipartFile file, Housing housing) throws IOException;
 
-    ImageDTO getImageById(Long photoId);
+        List<ImageDTO> saveImages(MultipartFile[] files, Housing housing) throws IOException;
 
-    void deleteImageById(Long id);
+        ImageDTO getImageById(Long photoId);
 
-    void deleteImagesByHousingId(Long housingId);
+        void deleteImageById(Long id);
+
+        void deleteImagesByHousingId(Long housingId);
 }

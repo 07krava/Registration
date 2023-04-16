@@ -16,8 +16,8 @@ import java.util.List;
 
 @Service
 public class ImageServiceImpl implements ImageService {
-    private ImageRepository imageRepository;
 
+    private ImageRepository imageRepository;
     @Autowired
     public ImageServiceImpl(ImageRepository imageRepository) {
         this.imageRepository = imageRepository;
@@ -33,7 +33,7 @@ public class ImageServiceImpl implements ImageService {
 
         return convertToDTO(savedImageEntity);
     }
-    @Override
+
     public List<ImageDTO> saveImages(MultipartFile[] files, Housing housingEntity) throws IOException {
         List<ImageDTO> imageDTOS = new ArrayList<>();
 
@@ -43,18 +43,18 @@ public class ImageServiceImpl implements ImageService {
 
         return imageDTOS;
     }
-    @Override
+
     public ImageDTO getImageById(Long id) {
-        Image image = imageRepository.findById(id)
+        Image imageEntity = imageRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Photo not found with id " + id));
 
-        return convertToDTO(image);
+        return convertToDTO(imageEntity);
     }
-    @Override
+
     public void deleteImageById(Long id) {
         imageRepository.deleteById(id);
     }
-    @Override
+
     public void deleteImagesByHousingId(Long housingId) {
         imageRepository.deleteByHousingId(housingId);
     }
@@ -64,6 +64,9 @@ public class ImageServiceImpl implements ImageService {
         imageDTO.setId(imageEntity.getId());
         imageDTO.setFileName(imageEntity.getFileName());
         imageDTO.setData(imageEntity.getData());
+        //photoDTO.setHousingId(photoEntity.getHousing().getId());
+
         return imageDTO;
     }
 }
+
