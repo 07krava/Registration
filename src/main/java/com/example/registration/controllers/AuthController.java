@@ -55,13 +55,11 @@ public class AuthController {
                 .username(registerDto.getUsername())
                 .email(registerDto.getEmail())
                 .phone(registerDto.getPhone())
-                .password(registerDto.getPassword())
+                .password(passwordEncoder.encode(registerDto.getPassword()))
                 .role(registerDto.getRole())
                 .build();
         userRepository.save(user);
 
         return new ResponseEntity<>("User register success!", HttpStatus.OK);
     }
-
-
 }

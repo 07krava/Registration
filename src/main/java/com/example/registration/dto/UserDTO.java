@@ -1,13 +1,16 @@
 package com.example.registration.dto;
 
-import com.example.registration.model.Role;
 import com.example.registration.model.User;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Builder
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserDTO {
     private Long id;
@@ -31,6 +34,7 @@ public class UserDTO {
        return UserDTO.builder()
                .email(user.getEmail())
                .username(user.getUsername())
+               .phone(user.getPhone())
                .build();
 
 //

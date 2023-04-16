@@ -32,4 +32,8 @@ public class User {
     @JoinColumn(name = "order_id")
     private List<Order> orders;
 
+    public User(long id, String name) {
+        this.id = id;
+        this.username = name;
+    }
 }

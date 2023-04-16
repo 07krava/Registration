@@ -3,12 +3,16 @@ package com.example.registration.dto;
 import com.example.registration.model.Role;
 import com.example.registration.model.User;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 //TODO use getter and setter annotation and remove all get and set methods
 
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RegisterDTO {

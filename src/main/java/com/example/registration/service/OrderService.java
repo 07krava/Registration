@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface OrderService {
 
-    Order createOrder(User user, List<Long> roomId);
+    Order createOrder(User user, List<Long> housingId);
 
-    void addRooms(Order order, List<Long> roomId);
+    void addHousings(Order order, List<Long> housingId);
 }
