@@ -1,13 +1,14 @@
 package com.example.registration.model;
 
-
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "image")
-@Getter
-@Setter
+@Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,7 +20,7 @@ public class Image {
     private String fileName;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "housing_id")
+    @JoinColumn(name = "housing_id", referencedColumnName = "id")
     private Housing housing;
 
     @Column(name = "data", nullable = false, columnDefinition = "mediumblob")
@@ -30,4 +31,3 @@ public class Image {
         this.data = data;
     }
 }
-
