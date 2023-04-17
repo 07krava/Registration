@@ -20,10 +20,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/admin/")
 public class AdminController {
-    //TODO please do all this instructions in every files, you can do it any time and before commit too
-    // 1) reformat all files in project got to -> Code -> Reformat code
-    // 2) optimize imports go to Code -> Optimize imports
-    // 3) after finishing making task which is described in todo, you can remove it(just delete TODO comments)
+
     private final UserService userService;
     private final HousingService housingService;
 
@@ -36,18 +33,17 @@ public class AdminController {
     @GetMapping(value = "users/{id}")
     public ResponseEntity<UserDTO> getUserById(@PathVariable(name = "id") Long id) {
         //TODO rewrite using optional.isPresent or optional.ifPresent
-        Optional<User> user = userService.findById(id);
+        Optional<User> user = userService.findUserById(id);
 
         if (user.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        UserDTO result = UserDTO.convertToDTO(user.get());
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    @GetMapping(value = "allUsers")
+    @GetMapping(value = "/allUsers")
     public ResponseEntity<List<User>> getAllUsers() {
-        List<User> users = userService.getAll();
+        List<User> users = userService.getAllUsers();
 
         if (users.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -55,27 +51,9 @@ public class AdminController {
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-    @DeleteMapping(value = "delete/{id}")
+    @DeleteMapping(value = "deleteUser/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable("id") Long id) {
-        userService.delete(id);
+        userService.deleteUser(id);
         return new ResponseEntity<>("User deleted", HttpStatus.OK);
-    }
-
-    @PostMapping("/add")
-    public ResponseEntity<HousingDTO> createHousing(@ModelAttribute HousingDTO housing, @RequestParam("file") MultipartFile[] files) throws IOException, IOException {
-        HousingDTO newHousing = housingService.createHousing(housing, files);
-        return new ResponseEntity<>(newHousing, HttpStatus.OK);
-    }
-
-    @PutMapping("/updateHousing/{id}")
-    public HousingDTO updateHousing(@PathVariable Long id, @ModelAttribute HousingDTO housingDTO, @RequestParam("file") MultipartFile[] files) throws IOException {
-        housingDTO.setId(id);
-        return housingService.updateHousing(id, housingDTO, files);
-    }
-
-    @DeleteMapping("/deleteHousing/{id}")
-    public ResponseEntity<String> deleteHousingById(@PathVariable Long id) {
-        housingService.deleteHousing(id);
-        return new ResponseEntity<>("Housing "+ id + " delete successfully!", HttpStatus.OK);
     }
 }
