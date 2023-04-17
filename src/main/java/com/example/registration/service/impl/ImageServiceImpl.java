@@ -34,7 +34,7 @@ public class ImageServiceImpl implements ImageService {
 
         return convertToDTO(savedImageEntity);
     }
-    @Override
+
     public List<ImageDTO> saveImages(MultipartFile[] files, Housing housingEntity) throws IOException {
         List<ImageDTO> imageDTOS = new ArrayList<>();
 

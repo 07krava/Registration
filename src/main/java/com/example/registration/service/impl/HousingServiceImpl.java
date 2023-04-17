@@ -26,6 +26,7 @@ import static com.example.registration.dto.HousingDTO.convertToDTO;
 import static com.example.registration.dto.HousingDTO.convertToEntity;
 import static com.example.registration.dto.ImageDTO.convertToImage;
 
+@Slf4j
 @Service
 public class HousingServiceImpl implements HousingService {
 
@@ -148,6 +149,7 @@ public class HousingServiceImpl implements HousingService {
         return convertToDTO(savedHousing);
     }
 
+    // worked
     @Override
     public List<ImageDTO> getImagesByHousingId(Long housingId) {
         List<ImageDTO> imageDTOList = new ArrayList<>();
@@ -239,3 +241,4 @@ public class HousingServiceImpl implements HousingService {
         }
     }
 }
+

@@ -40,7 +40,7 @@ class AdminControllerTest {
         userDTO.setId(userId);
         userDTO.setUsername("testuser");
 
-        when(userService.findById(userId)).thenReturn(userDTO);
+        when(userService.findUserById(userId)).thenReturn(userDTO);
 
         // Act
         ResponseEntity<UserDTO> response = adminController.getUserById(userId);
@@ -55,7 +55,7 @@ class AdminControllerTest {
         // Arrange
         Long userId = 1L;
 
-        when(userService.findById(userId)).thenReturn(null);
+        when(userService.findUserById(userId)).thenReturn(null);
 
         // Act
         ResponseEntity<UserDTO> response = adminController.getUserById(userId);
@@ -69,7 +69,7 @@ class AdminControllerTest {
     public void testGetAllUsersSuccess() {
         List<User> userList = new ArrayList<>();
         userList.add(new User(1L, "John"));
-        when(userService.getAll()).thenReturn(userList);
+        when(userService.getAllUsers()).thenReturn(userList);
 
         ResponseEntity<List<User>> response = adminController.getAllUsers();
 
@@ -80,7 +80,7 @@ class AdminControllerTest {
 
     @Test
     public void testGetAllUsersNotFound() {
-        when(userService.getAll()).thenReturn(new ArrayList<>());
+        when(userService.getAllUsers()).thenReturn(new ArrayList<>());
 
         ResponseEntity<List<User>> response = adminController.getAllUsers();
 
@@ -92,7 +92,7 @@ class AdminControllerTest {
         Long userId = 1L;
         ResponseEntity<String> expectedResponse = new ResponseEntity<>("User deleted", HttpStatus.OK);
 
-        doNothing().when(userService).delete(userId);
+        doNothing().when(userService).deleteUser(userId);
 
         ResponseEntity<String> actualResponse = adminController.deleteUser(userId);
 

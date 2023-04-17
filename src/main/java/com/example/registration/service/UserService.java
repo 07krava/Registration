@@ -12,7 +12,7 @@ public interface UserService {
     // Example
     // ->  User findByUsername(String username);
     // -> Optional<User> findByUsername(String username);
-   Optional<User> findByUsername(String username);
+   UserDTO findByUsername(String username);
 
     //TODO посмотреть как сделать через ifPresent() Java8
     Optional<UserDTO> loadUserByUsername(String username) throws UsernameNotFoundException;

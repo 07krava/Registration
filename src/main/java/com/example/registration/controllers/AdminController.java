@@ -38,7 +38,8 @@ public class AdminController {
         if (user.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        UserDTO result = UserDTO.convertToDto(user.get());
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @GetMapping(value = "/allUsers")
@@ -55,5 +56,23 @@ public class AdminController {
     public ResponseEntity<String> deleteUser(@PathVariable("id") Long id) {
         userService.deleteUser(id);
         return new ResponseEntity<>("User deleted", HttpStatus.OK);
+    }
+
+    @PostMapping("/add")
+    public ResponseEntity<HousingDTO> createHousing(@ModelAttribute HousingDTO housing, @RequestParam("file") MultipartFile[] files) throws IOException, IOException {
+        HousingDTO newHousing = housingService.createHousing(housing, files);
+        return new ResponseEntity<>(newHousing, HttpStatus.OK);
+    }
+
+    @PutMapping("/updateHousing/{id}")
+    public HousingDTO updateHousing(@PathVariable Long id, @ModelAttribute HousingDTO housingDTO, @RequestParam("file") MultipartFile[] files) throws IOException {
+        housingDTO.setId(id);
+        return housingService.updateHousing(id, housingDTO, files);
+    }
+
+    @DeleteMapping("/deleteHousing/{id}")
+    public ResponseEntity<String> deleteHousingById(@PathVariable Long id) {
+        housingService.deleteHousing(id);
+        return new ResponseEntity<>("Housing "+ id + " delete successfully!", HttpStatus.OK);
     }
 }

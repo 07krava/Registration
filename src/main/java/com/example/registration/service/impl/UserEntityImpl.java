@@ -26,10 +26,11 @@ public class UserEntityImpl implements UserService {
     //TODO add convert entity UserDTO
 
     @Override
-    public Optional<User> findByUsername(String username) {
+    public UserDTO findByUsername(String username) {
         Optional<User> result = userRepository.findByUsername(username);
-        log.info("In findByUsername - user {} ", result, username);
-        return result;
+        UserDTO userDTO = UserDTO.convertToDTO(result.get());
+        log.info("In findByUsername - user {} ", userDTO, username);
+        return userDTO;
     }
 
     //TODO посмотреть как сделать через ifPresent() Java8
