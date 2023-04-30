@@ -13,6 +13,7 @@ import java.util.Date;
 public class JWTGenerator {
 
     public String generateToken(Authentication authentication){
+
         Date expireDate = new Date(new Date().getTime() + SecurityConstants.JWT_EXPIRATION);
 
         return Jwts.builder()

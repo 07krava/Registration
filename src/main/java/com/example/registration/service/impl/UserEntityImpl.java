@@ -23,23 +23,20 @@ public class UserEntityImpl implements UserService {
         this.userRepository = userRepository;
     }
 
-    //TODO add convert entity UserDTO
-
     @Override
     public UserDTO findByUsername(String username) {
         Optional<User> result = userRepository.findByUsername(username);
-        UserDTO userDTO = UserDTO.convertToDTO(result.get());
+        UserDTO userDTO = UserDTO.convertToDto(result.get());
         log.info("In findByUsername - user {} ", userDTO, username);
         return userDTO;
     }
 
-    //TODO посмотреть как сделать через ifPresent() Java8
     @Override
     public Optional<UserDTO> loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<User> user = userRepository.findByUsername(username);
 
         if (user.isPresent()){
-            return Optional.ofNullable(UserDTO.convertToDTO(user.get()));
+            return Optional.ofNullable(UserDTO.convertToDto(user.get()));
         }else{
             throw new UsernameNotFoundException("User ".concat(username).concat(" not found"));
         }
@@ -53,15 +50,15 @@ public class UserEntityImpl implements UserService {
     }
 
     @Override
-    public Optional<User> findUserById(Long id) {
-        User result = userRepository.findById(id).orElse(null);
+    public UserDTO findUserById(Long id) {
+        UserDTO result = UserDTO.convertToDto(userRepository.findById(id).orElse(null));
 
         if (result == null){
             log.warn("IN findById - no user found by id: {}", id);
             return null;
         }
         log.info("IN findById - user: {} found by id: {}", result);
-        return Optional.of(result);
+        return result;
     }
 
     @Override

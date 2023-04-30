@@ -3,9 +3,11 @@ package com.example.registration.service.impl;
 
 import com.example.registration.dto.HousingDTO;
 import com.example.registration.dto.ImageDTO;
+import com.example.registration.model.Booking;
 import com.example.registration.model.Housing;
 import com.example.registration.model.Image;
 import com.example.registration.model.Location;
+import com.example.registration.repository.BookingRepository;
 import com.example.registration.repository.HousingRepository;
 import com.example.registration.repository.ImageRepository;
 import com.example.registration.service.HousingService;
@@ -17,9 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.example.registration.dto.HousingDTO.convertToDTO;
@@ -33,12 +33,14 @@ public class HousingServiceImpl implements HousingService {
     private final HousingRepository housingRepository;
     private final ImageRepository imageRepository;
     private final ImageService imageService;
+    private final BookingRepository bookingRepository;
 
     @Autowired
-    public HousingServiceImpl(HousingRepository housingRepository, ImageRepository imageRepository, ImageService imageService) {
+    public HousingServiceImpl(HousingRepository housingRepository, ImageRepository imageRepository, ImageService imageService, BookingRepository bookingRepository) {
         this.housingRepository = housingRepository;
         this.imageRepository = imageRepository;
         this.imageService = imageService;
+        this.bookingRepository = bookingRepository;
     }
 
     @Override
@@ -93,7 +95,6 @@ public class HousingServiceImpl implements HousingService {
 
         return convertToDTO(housing);
     }
-
     // worked
     @Override
     public HousingDTO updateHousing(Long housingId, HousingDTO housingDTO, MultipartFile[] files) throws IOException {
@@ -239,6 +240,42 @@ public class HousingServiceImpl implements HousingService {
         } else {
             throw new NullPointerException("Housing not found with id: " + id);
         }
+    }
+
+    @Override
+    public List<Housing> getAvailableHousings(Date startDate, Date endDate) {
+        List<Housing> allHousing = housingRepository.findAll();
+        Set<Housing> bookedHousing = new HashSet<>();
+        for (Housing housing : allHousing) {
+            for (Booking booking : housing.getBookings()) {
+                if (isOverlapping(booking.getStartDate(), booking.getEndDate(), startDate, endDate)) {
+                    bookedHousing.add(housing);
+                    break;
+                }
+            }
+        }
+        allHousing.removeAll(bookedHousing);
+        return allHousing;
+    }
+
+    private boolean isOverlapping(Date start1, Date end1, Date start2, Date end2) {
+        return start1.before(end2) && start2.before(end1);
+    }
+
+    @Override
+    public List<Housing> getBookedHousing(Date startDate, Date endDate) {
+        List<Housing> allHousing = housingRepository.findAll();
+        Set<Housing> bookedHousing = new HashSet<>();
+        for (Housing housing : allHousing) {
+            for (Booking booking : housing.getBookings()) {
+                if (isOverlapping(booking.getStartDate(), booking.getEndDate(), startDate, endDate)) {
+                    bookedHousing.add(housing);
+                    break;
+                }
+            }
+        }
+        allHousing.removeAll(bookedHousing);
+        return new ArrayList<>(bookedHousing);
     }
 }
 

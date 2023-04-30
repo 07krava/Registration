@@ -27,7 +27,7 @@ public class ImageDTO {
         return imageDTO;
     }
 
-    public static Image convertToImage(ImageDTO imageDTO){
+    public static Image convertToImage(ImageDTO imageDTO) {
         Image image = new Image();
         image.setId(imageDTO.getId());
         image.setFileName(imageDTO.getFileName());
@@ -35,10 +35,11 @@ public class ImageDTO {
         image.setData(imageDTO.getData());
         return image;
     }
+
     public ImageDTO convertMultipartFileToImageDTO(MultipartFile file, Long id) {
-        ImageDTO photoDTO = new ImageDTO();
-        photoDTO.setId(id);
-        photoDTO.setFileName(file.getOriginalFilename());
-        return photoDTO;
+        ImageDTO imageDTO = new ImageDTO();
+        imageDTO.setId(id);
+        imageDTO.setFileName(file.getOriginalFilename());
+        return imageDTO;
     }
 }

@@ -1,5 +1,7 @@
 package com.example.registration.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,6 +17,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "orders")
 @Builder
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Order {
 
     @Id
@@ -25,9 +28,11 @@ public class Order {
     @Column(name = "updated")
     private LocalDateTime update;
     //TODO refactor
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "room_id")
     private Housing housing;

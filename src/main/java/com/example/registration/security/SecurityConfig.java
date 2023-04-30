@@ -40,7 +40,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests()
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers("**/admin/**").hasRole("ADMIN")
-                .requestMatchers("api/housing/owner/**").hasRole("OWNER")
+                .requestMatchers("auth/api/owner/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic();

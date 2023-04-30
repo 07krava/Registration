@@ -1,6 +1,7 @@
 package com.example.registration.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,6 +11,8 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "housing")
@@ -17,6 +20,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Housing {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,4 +48,13 @@ public class Housing {
     @JsonIgnore
     @OneToMany(mappedBy = "housing", cascade = CascadeType.ALL)
     private List<Image> images = new ArrayList<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "housing", cascade = CascadeType.ALL)
+    private Set<Booking> bookings;
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }
